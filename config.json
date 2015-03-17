@@ -4,8 +4,8 @@
 	"maxDays": 8,
 	"mysql" : {
 		"user": "root",
-		"password": "admin",
-		"database": "etbmanager22"
+		"password": "mysqlpwd",
+		"database": "dbname"
 		},
 	"ftp": {
 		"host": "ftp.etbmanager.org",

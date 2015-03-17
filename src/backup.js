@@ -19,7 +19,11 @@ function backupFile(callback) {
 
 	cfg.backupFile = fo;
 
-	fs.unlinkSync(fo);
+	try {
+		fs.unlinkSync(fo);
+	} catch (err) {
+
+	}
 
 	var cmd = cfg.mysqldump +
 		" --user=" + cfg.mysql.user +
@@ -53,8 +57,7 @@ function backupFile(callback) {
 function compressBackup(callback) {
 	var dt = new Date();
 
-	var f = cfg.mysql.database + '-' + dt.getFullYear() + '-' +
-		(dt.getMonth() + 1) + '-' + dt.getDate() + '.bkp.zip';
+	var f = cfg.mysql.database + '.bkp.zip';
 
 	var zipfile = path.join(cfg.backupDir, f);
 	cfg.zipfile = zipfile;
@@ -78,10 +81,26 @@ function compressBackup(callback) {
 				return;
 			}
 			console.log('  Zip successfully generated.');
-			deleteOld(callback);
+
+			fs.unlinkSync(cfg.backupFile);
+
+			var fdt = cfg.mysql.database + '-' + dt.getFullYear() + '-' +
+				(dt.getMonth() + 1) + '-' + dt.getDate() + '.bkp.zip';
+			fdt = path.join(cfg.backupDir, fdt);
+
+			// copy database.zip to database-date.zip
+			copyFile(cfg.zipfile, fdt, function(err) {
+				if (err) {
+					callback(err);
+					return;
+				}
+				deleteOld(callback);
+			});
+
 		});
 	});
 
+	// zip file
 	zip.pipe( out );
 
 	console.log('\nCompressing backup file');
@@ -110,6 +129,7 @@ function deleteOld(callback) {
 	lst.forEach( function (file) {
 		var f = path.join(cfg.backupDir, file);
 		var info = fs.statSync( f );
+
 		if (info.mtime < dt) {
 			console.log('Deleting ' + f);
 			fs.unlinkSync(f);
@@ -117,4 +137,17 @@ function deleteOld(callback) {
 	});
 
 	callback();
+}
+
+/**
+ * Copy a file
+ * @param  {[type]}   fori     [description]
+ * @param  {[type]}   fdest    [description]
+ * @param  {Function} callback [description]
+ * @return {[type]}            [description]
+ */
+function copyFile(fori, fdest, callback) {
+	var out = fs.createWriteStream(fdest);
+	out.on('close', callback);
+	fs.createReadStream(fori).pipe(out);
 }
