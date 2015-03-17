@@ -1,0 +1,16 @@
+{
+  "name": "mysqlbackup",
+  "version": "0.0.1",
+  "dependencies": {
+    "ftp":"~0.3.8",
+    "archiver": "0.14.3"
+  },
+  "devDependencies": {
+  },
+  "engines": {
+    "node": ">=0.8.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  }
+}

@@ -1,0 +1,16 @@
+{
+	"backupDir": "/Users/rmemoria/temp/backup",
+	"mysqldump": "mysqldump",
+	"maxDays": 8,
+	"mysql" : {
+		"user": "root",
+		"password": "admin",
+		"database": "etbmanager"
+		},
+	"ftp": {
+		"host": "ftp.etbmanager.org",
+		"user": "ricardo",
+		"password": "rml$40km35",
+		"dir": "/web-download/etbmanager.org/download"
+	}
+}
