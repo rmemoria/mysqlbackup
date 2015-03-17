@@ -11,11 +11,18 @@ var config = readConfig();
  */
 backup.execute(config,  function(err) {
 
+	if (err) {
+		console.log(err);
+		return;
+	}
+
 	/**
 	 * Execute the FTP upload
 	 */
 	ftpupload.execute(config, function(err) {
-
+		if (err) {
+			console.log(err);
+		}
 	});
 });
 
