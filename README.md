@@ -19,7 +19,14 @@ Simple app to perform a mysql database backup and send it to a FTP server
 ## Using it
 
 * Install node.js;
-* Update the configuration file to indicate database and FTP server;
+* Update the configuration file to indicate database and FTP server editing the file `config.json`
+* Install node modules with the following command
+
+    `$cd mysqlbackup`
+
+    `$npm install`
+
 * Run it with the command
 
-    $ node app
+    `$node app`
+
