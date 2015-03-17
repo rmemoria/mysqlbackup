@@ -19,6 +19,8 @@ function backupFile(callback) {
 
 	cfg.backupFile = fo;
 
+	fs.unlinkSync(fo);
+
 	var cmd = cfg.mysqldump +
 		" --user=" + cfg.mysql.user +
 		" --password=" + cfg.mysql.password +
@@ -28,8 +30,22 @@ function backupFile(callback) {
 	console.log('\nGenerating backup file ' + fo + '...');
 	exec(cmd, function(err, stdout, stderr) {
 		console.log(stderr);
-		console.log('  Backup successfully generated');
-		compressBackup(callback);
+
+		// check if backup file was successfully generated before continue
+		fs.stat(fo, function(err, stat) {
+			if (err) {
+				callback(err);
+				return;
+			}
+
+			if (stat.size === 0) {
+				callback('ERROR: Backup file was not generated');
+				return;
+			}
+
+			console.log('  Backup successfully generated');
+			compressBackup(callback);
+		});
 	});
 }
 
@@ -54,9 +70,16 @@ function compressBackup(callback) {
 		callback(err);
 	});
 
+	// called when zip file is created and nothing else must be done
 	out.on('close', function() {
-		console.log('  Zip successfully generated.');
-		deleteOld(callback);
+		fs.stat(zipfile, function(err) {
+			if (err) {
+				callback("Zip file was not created: " + err);
+				return;
+			}
+			console.log('  Zip successfully generated.');
+			deleteOld(callback);
+		});
 	});
 
 	zip.pipe( out );

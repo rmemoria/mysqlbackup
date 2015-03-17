@@ -5,7 +5,7 @@
 	"mysql" : {
 		"user": "root",
 		"password": "admin",
-		"database": "etbmanager"
+		"database": "etbmanager22"
 		},
 	"ftp": {
 		"host": "ftp.etbmanager.org",
