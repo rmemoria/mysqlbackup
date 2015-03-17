@@ -9,8 +9,9 @@ Simple app to perform a mysql database backup and send it to a FTP server
 
 ## Features
 
-* Keep a list of backup performed in the last 7 days
-* Language: Javascript
+* Perform MySQL database backup;
+* Keep a list of backup performed in the last days (configured);
+* Transmit the latest backup file to a FTP server;
 
 ## Requirements
 
